@@ -23,7 +23,7 @@ INSERT INTO "word" ("id", "language_id", "original", "translation", "next")
 VALUES
   (1, 1, 'bello', 'hello', 2),
   (2, 1, 'poopaye', 'goodbye', 3),
-  (3, 1, 'or to', 'thank you', 4),
+  (3, 1, 'tank yu', 'thank you', 4),
   (4, 1, 'beedo', 'fire', 5),
   (5, 1, 'me want banana', "I'm hungry", 6),
   (6, 1, 'muak muak muak', 'kiss kiss', 7),
