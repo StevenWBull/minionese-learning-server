@@ -111,7 +111,7 @@ describe('Language Endpoints', function () {
   /**
    * @description Get head from language
    **/
-  describe.only(`GET /api/language/head`, () => {
+  describe(`GET /api/language/head`, () => {
     const usersLanguage = testLanguages.find(l => l.user_id === testUser.id);
     const headWord = testWords.find(w => w.language_id === usersLanguage.id);
 
@@ -141,7 +141,7 @@ describe('Language Endpoints', function () {
   /**
    * @description Submit a new guess for the language
    **/
-  describe(`POST /api/language/guess`, () => {
+  describe.only(`POST /api/language/guess`, () => {
     const [testLanguage] = testLanguages;
     const testLanguagesWords = testWords.filter(
       w => w.language_id === testLanguage.id
@@ -156,7 +156,7 @@ describe('Language Endpoints', function () {
       );
     });
 
-    it.skip(`responds with 400 required error when 'guess' is missing`, () => {
+    it(`responds with 400 required error when 'guess' is missing`, () => {
       const postBody = {
         randomField: 'test random field',
       };

@@ -62,8 +62,14 @@ languageRouter
 
 languageRouter
   .post('/guess', async (req, res, next) => {
-    // implement me
-    res.send('implement me!');
+    const { guess } = req.body;
+    if (!guess) {
+      return res.status(400).send({
+        error: `Missing 'guess' in request body`
+      });
+    }
+
+    res.status(200).send('OK');
   });
 
 module.exports = languageRouter;
