@@ -1,4 +1,4 @@
-const { LinkedList } = require('../utils/LinkedList');
+const LinkedList = require('../utils/LinkedList');
 
 const LanguageService = {
   getUsersLanguage(db, user_id) {
@@ -31,16 +31,12 @@ const LanguageService = {
       .where({ language_id });
   },
 
-  createLinkedList(arr, language) {
+  createLinkedList(arr) {
     const sll = new LinkedList();
-    let currNode = arr.find( e => e.id === language.head);
-    sll.insertLast(currNode);
-
-    while (!currNode.next) {
-      currNode = arr.find( e => e.id === currNode.next);
-      sll.insertLast(currNode);
+    for (let i = 0; i < arr.length; i++) {
+      sll.insertLast(arr[i]);
     }
-    return sll;
+    return sll.head;
   },
 
   getLanguageHeadWord(db, language_head) {
