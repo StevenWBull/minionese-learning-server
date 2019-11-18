@@ -49,11 +49,11 @@ languageRouter
     try {
       const headWord = await LanguageService.getLanguageHeadWord(
         req.app.get('db'),
-        req.language.id
+        req.language.head
       );
-
-      res.json({
-        headWord
+      res.send({
+        totalScore: req.language.total_score,
+        ...headWord
       });
     } catch (error) {
       next(error);
