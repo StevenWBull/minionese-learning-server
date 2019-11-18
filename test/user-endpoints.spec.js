@@ -172,17 +172,20 @@ describe('User Endpoints', function () {
           name: 'test name',
         }
         const expectedList = {
-          name: 'French',
+          name: 'Minionese',
           total_score: 0,
           words: [
-            { original: 'entraine toi', translation: 'practice' },
-            { original: 'bonjour', translation: 'hello' },
-            { original: 'maison', translation: 'house' },
-            { original: 'développeur', translation: 'developer' },
-            { original: 'traduire', translation: 'translate' },
-            { original: 'incroyable', translation: 'amazing' },
-            { original: 'chien', translation: 'dog' },
-            { original: 'chat', translation: 'cat' },
+            { original: 'bello', translation: 'hello' },
+            { original: 'poopaye', translation: 'goodbye' },
+            { original: 'tank yu', translation: 'thank you' },
+            { original: 'beedo', translation: 'fire' },
+            { original: 'me want banana', translation: 'I am hungry' },
+            { original: 'muak muak muak', translation: 'kiss kiss' },
+            { original: 'tulaliloo ti amo', translation: 'we love you' },
+            { original: 'gelato', translation: 'ice cream' },
+            { original: 'hana', translation: 'one' },
+            { original: 'dul', translation: 'two' },
+            { original: 'sae', translation: 'three' }
           ]
         }
         return supertest(app)
@@ -202,9 +205,9 @@ describe('User Endpoints', function () {
                 ) AS words`
               ),
             )
-            .leftJoin('word', 'word.language_id', 'language.id')
-            .groupBy('language.id')
-            .where({ user_id: res.body.id })
+              .leftJoin('word', 'word.language_id', 'language.id')
+              .groupBy('language.id')
+              .where({ user_id: res.body.id })
           )
           .then(dbLists => {
             expect(dbLists).to.have.length(1)
