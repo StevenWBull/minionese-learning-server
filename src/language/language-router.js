@@ -68,15 +68,17 @@ languageRouter
         error: `Missing 'guess' in request body`
       });
     }
-   
     const words = await LanguageService.getLanguageWords(
       req.app.get('db'),
       req.language.id
-    )
+    );
     const wordsLinkedList = LanguageService.createLinkedList(words);
-    console.log(wordsLinkedList);
-
-    res.status(200).send('OK');
+    
+    if (guess.toLowerCase() === wordsLinkedList.value.translation) {
+      return res.send('You got it right!');
+    } else {
+      return res.send('Oh! Wrong answer!');
+    }
   });
 
 module.exports = languageRouter;
