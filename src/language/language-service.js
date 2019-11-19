@@ -55,6 +55,24 @@ const LanguageService = {
           wordIncorrectCount: word[0].incorrect_count
         };
       });
+  },
+
+  handleCorrectAnswer(sll, item) {
+    //pull the correct item
+    //set memory_value to *2 of current
+    //save item to a variable
+    //loop through current list with counter, check where memory_value >= then stop
+    //insert item at the new index
+    //update database with LL
+
+  },
+
+  handleIncorrectAnswer(sll, item) {
+    //pull incorrect item
+    //set memory_value to 1
+    //save item to variable, then remove from the lL
+    //insertFirst on item
+    //update database with LL
   }
 };
 
