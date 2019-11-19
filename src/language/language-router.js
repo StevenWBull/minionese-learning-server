@@ -80,25 +80,25 @@ languageRouter
       req.language.head
     );
     //create linkedlist from current words
-    const sll = LanguageService.createLinkedList(words);
+    let sll = LanguageService.createLinkedList(words);
     //find current and next word based on head number in LinkedList Data structure
-    const currWord = LanguageService.findCurrNode(sll, head.nextWord);
-    const nextWord = currWord.next;
-
-    console.log(currWord)
+    let currWord = LanguageService.findCurrNode(sll, head.nextWord);
+    let nextWord = currWord.next;
 
     if (guess.toLowerCase() === currWord.translation) {
       return res.send('You got it right!');
-    } else {
-      await LanguageService.updatedHead(
-        req.app.get('db'),
-        req.user.id,
-        currWord.value.next
-      );
+    } else {      
       await LanguageService.incrementIncorrect(
         req.app.get('db'),
         currWord.value.id,
         head.wordIncorrectCount
+      );
+      await LanguageService.handleIncorrectAnswer(
+        req.app.get('db'),
+        sll,
+        currWord.value,
+        nextWord.value.id,
+        req.language.id
       );
       // reset head values with new values
       head = await LanguageService.getLanguageHeadWord(

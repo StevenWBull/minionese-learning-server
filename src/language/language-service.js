@@ -61,20 +61,23 @@ const LanguageService = {
     return sll.findNode(name);
   },
 
-  updatedHead(db, user_id, new_head) {
+/*   updatedHead(db, user_id, new_head) {
     new_head = Number(new_head);
     return db
       .from('language')
       .where('language.user_id', user_id)
       .update({ head: new_head });
-  },
+  }, */
 
   incrementIncorrect(db, word_id, curr_count) {
     let new_count = Number(curr_count) + 1
     return db
       .from('word')
       .where({ id: word_id })
-      .update({ incorrect_count: new_count });
+      .update({ 
+        incorrect_count: new_count,
+        memory_value: 1 
+      });
   },
 
   handleCorrectAnswer(sll, item) {
@@ -87,13 +90,41 @@ const LanguageService = {
 
   },
 
-  handleIncorrectAnswer(sll, item) {
+  handleIncorrectAnswer(db, sll, item, key, language_id) {
     //pull incorrect item
     //set memory_value to 1
     //save item to variable, then remove from the lL
-    //insertFirst on item
+    //insertAfter on item
     //update database with LL
+    sll.remove(item);
+    sll.insertAfter(item, key);
     
+    let updateDb = [];
+    let currNode = sll.head;
+
+    while(currNode !== null) {
+      updateDb.push(currNode.value);
+      currNode = currNode.next;
+    }
+
+    return db.transaction(async trx =>{
+      return Promise.all([
+        trx('language')
+          .where({id: language_id})
+          .update({
+            head: updateDb[0].id
+          }),
+        
+        ...updateDb.map((word, i) => {
+          return trx('word')
+            .where({id: word.id})
+            .update({
+              next: word.next ? word.next : null,
+              memory_value: word.memory_value
+            });
+        })
+      ]);
+    });
   }
 };
 

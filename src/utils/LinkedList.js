@@ -59,14 +59,16 @@ class LinkedList {
 
     let currentNode = this.head;
 
-    while ((currentNode.value !== key) && (currentNode !== null)) {
+    while ((currentNode.value.id !== key) && (currentNode !== null)) {
       currentNode = currentNode.next;
     }
     if (currentNode === null) {
       return 'Key not found';
     } else {
-      let newNode = new _Node(item, currentNode.next);
+      let new_item = { ...item, next: currentNode.next.value.id };
+      let newNode = new _Node(new_item, currentNode.next);
       currentNode.next = newNode;
+      currentNode.value.next = newNode.value.id;
     }
   }
 
