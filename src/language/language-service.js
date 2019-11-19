@@ -69,11 +69,12 @@ const LanguageService = {
       .update({ head: newHead });
   },
 
-  incrementIncorrect(db, word_id) {
+  incrementIncorrect(db, word_id, curr_count) {
+    let new_count = Number(curr_count) + 1
     return db
       .from('word')
       .where({ id: word_id })
-      .update({ incorrect_count: incorrect_count++ });
+      .update({ incorrect_count: new_count });
   },
 
   handleCorrectAnswer(sll, item) {

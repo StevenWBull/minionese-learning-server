@@ -93,11 +93,16 @@ languageRouter
         req.user.id,
         req.language.head
       );
+      await LanguageService.incrementIncorrect(
+        req.app.get('db'),
+        currWord.value.id,
+        head.wordIncorrectCount
+      );
+      // reset head values with new values
       head = await LanguageService.getLanguageHeadWord(
         req.app.get('db'),
         req.language.head
       );
-
       return res.json({
         nextWord: nextWord.value.original,
         totalScore: req.language.total_score,
