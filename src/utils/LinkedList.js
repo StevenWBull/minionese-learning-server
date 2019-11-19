@@ -53,12 +53,12 @@ class LinkedList {
     }
   }
 
-  find(item) {
+  findNode(item) {
     let currNode = this.head;
     if (!this.head) {
       return null;
     }
-    while (currNode.value !== item) {
+    while (currNode.value.id !== item) {
       if (currNode.next === null) {
         return null;
       } else {
@@ -88,5 +88,23 @@ class LinkedList {
     previousNode.next = currNode.next;
   }
 }
+
+/* const main = () => {
+  const sll = new LinkedList();
+  sll.insertFirst(
+    {
+      id: 1,
+      language_id: 1,
+      original: 'bello',
+      translation: 'hello',
+      next: 2,
+      memory_value: 1,
+      correct_count: 0,
+      incorrect_count: 0
+    });
+  console.log(sll.findNode(1));
+}
+
+main(); */
 
 module.exports = LinkedList;

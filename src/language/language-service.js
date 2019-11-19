@@ -31,14 +31,6 @@ const LanguageService = {
       .where({ language_id });
   },
 
-  createLinkedList(arr) {
-    const sll = new LinkedList();
-    for (let i = 0; i < arr.length; i++) {
-      sll.insertLast(arr[i]);
-    }
-    return sll.head;
-  },
-
   getLanguageHeadWord(db, language_head) {
     return db
       .from('word')
@@ -55,6 +47,20 @@ const LanguageService = {
           wordIncorrectCount: word[0].incorrect_count
         };
       });
+  },
+
+  createLinkedList(arr) {
+    const sll = new LinkedList();
+    for (let i = 0; i < arr.length; i++) {
+      sll.insertLast(arr[i]);
+    }
+    return sll;
+  },
+
+  findCurrId(sll, id) {
+    let numId = Number(id);
+    console.log(sll.findNode(numId).value);
+    return sll.findNode(numId).value;
   },
 
   handleCorrectAnswer(sll, item) {
