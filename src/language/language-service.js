@@ -61,12 +61,12 @@ const LanguageService = {
     return sll.findNode(name);
   },
 
-  updatedHead(db, user_id, curr_head) {
-    let newHead = Number(curr_head) + 1;
+  updatedHead(db, user_id, new_head) {
+    new_head = Number(new_head);
     return db
       .from('language')
       .where('language.user_id', user_id)
-      .update({ head: newHead });
+      .update({ head: new_head });
   },
 
   incrementIncorrect(db, word_id, curr_count) {
@@ -93,6 +93,7 @@ const LanguageService = {
     //save item to variable, then remove from the lL
     //insertFirst on item
     //update database with LL
+    
   }
 };
 

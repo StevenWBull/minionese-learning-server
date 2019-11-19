@@ -53,6 +53,23 @@ class LinkedList {
     }
   }
 
+  insertAfter(item, key) {
+    if (!this.head)
+      return this.insertFirst(item);
+
+    let currentNode = this.head;
+
+    while ((currentNode.value !== key) && (currentNode !== null)) {
+      currentNode = currentNode.next;
+    }
+    if (currentNode === null) {
+      return 'Key not found';
+    } else {
+      let newNode = new _Node(item, currentNode.next);
+      currentNode.next = newNode;
+    }
+  }
+
   findNode(item) {
     let currNode = this.head;
     if (!this.head) {

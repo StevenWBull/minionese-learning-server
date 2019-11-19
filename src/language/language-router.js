@@ -85,13 +85,15 @@ languageRouter
     const currWord = LanguageService.findCurrNode(sll, head.nextWord);
     const nextWord = currWord.next;
 
+    console.log(currWord)
+
     if (guess.toLowerCase() === currWord.translation) {
       return res.send('You got it right!');
     } else {
       await LanguageService.updatedHead(
         req.app.get('db'),
         req.user.id,
-        req.language.head
+        currWord.value.next
       );
       await LanguageService.incrementIncorrect(
         req.app.get('db'),
