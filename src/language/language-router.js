@@ -62,22 +62,30 @@ languageRouter
 
 languageRouter
   .post('/guess', async (req, res, next) => {
-    const { guess, id } = req.body;
+    const { guess } = req.body;
 
     if (!guess) {
       return res.status(400).send({
         error: `Missing 'guess' in request body`
       });
     }
-
+    //get users words
     const words = await LanguageService.getLanguageWords(
       req.app.get('db'),
       req.language.id
     );
-    
+
+    const head = await LanguageService.getLanguageHeadWord(
+      req.app.get('db'),
+      req.language.head
+    );
+    //create linkedlist from currents words
+    const sll = LanguageService.createLinkedList(words);
+    //find current word based on head number
+    const currWord = LanguageService.findCurrNode(sll, head.nextWord);
+
     const wordsLinkedList = LanguageService.createLinkedList(words);
-    //console.log(JSON.stringify(wordsLinkedList));
-    if (guess.toLowerCase() === LanguageService.findCurrId(wordsLinkedList, id).translation) {
+    if (guess.toLowerCase() === currWord.translation) {
       return res.send('You got it right!');
     } else {
       return res.send('Oh! Wrong answer!');

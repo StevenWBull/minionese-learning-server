@@ -58,7 +58,7 @@ class LinkedList {
     if (!this.head) {
       return null;
     }
-    while (currNode.value.id !== item) {
+    while (currNode.value.original !== item) {
       if (currNode.next === null) {
         return null;
       } else {

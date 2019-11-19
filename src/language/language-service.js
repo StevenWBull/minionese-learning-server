@@ -32,6 +32,7 @@ const LanguageService = {
   },
 
   getLanguageHeadWord(db, language_head) {
+    console.log(language_head)
     return db
       .from('word')
       .select(
@@ -40,11 +41,11 @@ const LanguageService = {
         'incorrect_count'
       )
       .where('word.id', language_head )
-      .then( word => {
+      .then( ([ word ]) => {
         return {
-          nextWord: word[0].original,
-          wordCorrectCount: word[0].correct_count,
-          wordIncorrectCount: word[0].incorrect_count
+          nextWord: word.original,
+          wordCorrectCount: word.correct_count,
+          wordIncorrectCount: word.incorrect_count
         };
       });
   },
@@ -57,10 +58,9 @@ const LanguageService = {
     return sll;
   },
 
-  findCurrId(sll, id) {
-    let numId = Number(id);
-    console.log(sll.findNode(numId).value);
-    return sll.findNode(numId).value;
+  findCurrNode(sll, name) {
+    console.log(sll.findNode(name).value);
+    return sll.findNode(name).value;
   },
 
   handleCorrectAnswer(sll, item) {
