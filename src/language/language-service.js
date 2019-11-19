@@ -32,7 +32,6 @@ const LanguageService = {
   },
 
   getLanguageHeadWord(db, language_head) {
-    console.log(language_head)
     return db
       .from('word')
       .select(
@@ -59,7 +58,7 @@ const LanguageService = {
   },
 
   findCurrNode(sll, name) {
-    return sll.findNode(name).value;
+    return sll.findNode(name);
   },
 
   updatedHead(db, user_id, curr_head) {
@@ -68,6 +67,13 @@ const LanguageService = {
       .from('language')
       .where('language.user_id', user_id)
       .update({ head: newHead });
+  },
+
+  incrementIncorrect(db, word_id) {
+    return db
+      .from('word')
+      .where({ id: word_id })
+      .update({ incorrect_count: incorrect_count++ });
   },
 
   handleCorrectAnswer(sll, item) {

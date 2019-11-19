@@ -75,16 +75,16 @@ languageRouter
       req.language.id
     );
 
-    const head = await LanguageService.getLanguageHeadWord(
+    let head = await LanguageService.getLanguageHeadWord(
       req.app.get('db'),
       req.language.head
     );
     //create linkedlist from current words
     const sll = LanguageService.createLinkedList(words);
-    //find current word based on head number
+    //find current and next word based on head number in LinkedList Data structure
     const currWord = LanguageService.findCurrNode(sll, head.nextWord);
+    const nextWord = currWord.next;
 
-    const wordsLinkedList = LanguageService.createLinkedList(words);
     if (guess.toLowerCase() === currWord.translation) {
       return res.send('You got it right!');
     } else {
@@ -93,7 +93,19 @@ languageRouter
         req.user.id,
         req.language.head
       );
-      return res.send('Oh! Wrong answer!');
+      head = await LanguageService.getLanguageHeadWord(
+        req.app.get('db'),
+        req.language.head
+      );
+
+      return res.json({
+        nextWord: nextWord.value.original,
+        totalScore: req.language.total_score,
+        wordCorrectCount: head.wordCorrectCount,
+        wordIncorrectCount: head.wordIncorrectCount,
+        answer: currWord.value.translation,
+        isCorrect: false
+      });
     }
   });
 
