@@ -115,7 +115,7 @@ const LanguageService = {
             head: updateDb[0].id
           }),
         
-        ...updateDb.map((word, i) => {
+        ...updateDb.map(word => {
           return trx('word')
             .where({id: word.id})
             .update({
