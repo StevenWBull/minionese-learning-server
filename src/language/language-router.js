@@ -79,7 +79,7 @@ languageRouter
       req.app.get('db'),
       req.language.head
     );
-    //create linkedlist from currents words
+    //create linkedlist from current words
     const sll = LanguageService.createLinkedList(words);
     //find current word based on head number
     const currWord = LanguageService.findCurrNode(sll, head.nextWord);
@@ -88,6 +88,11 @@ languageRouter
     if (guess.toLowerCase() === currWord.translation) {
       return res.send('You got it right!');
     } else {
+      await LanguageService.updatedHead(
+        req.app.get('db'),
+        req.user.id,
+        req.language.head
+      );
       return res.send('Oh! Wrong answer!');
     }
   });

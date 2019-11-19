@@ -59,8 +59,15 @@ const LanguageService = {
   },
 
   findCurrNode(sll, name) {
-    console.log(sll.findNode(name).value);
     return sll.findNode(name).value;
+  },
+
+  updatedHead(db, user_id, curr_head) {
+    let newHead = Number(curr_head) + 1;
+    return db
+      .from('language')
+      .where('language.user_id', user_id)
+      .update({ head: newHead });
   },
 
   handleCorrectAnswer(sll, item) {
