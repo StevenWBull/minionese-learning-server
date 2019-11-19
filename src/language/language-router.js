@@ -73,7 +73,7 @@ languageRouter
       req.language.id
     );
     const wordsLinkedList = LanguageService.createLinkedList(words);
-    
+    console.log(JSON.stringify(wordsLinkedList));
     if (guess.toLowerCase() === wordsLinkedList.value.translation) {
       return res.send('You got it right!');
     } else {

@@ -26,6 +26,33 @@ class LinkedList {
     }
   }
 
+  insertAt(item, index) {
+    if (index < 0)
+      return 'Please choose a positive index';
+
+    if (!this.head)
+      return this.insertFirst(item);
+
+    if (this.head.value === index -1)
+      return this.insertFirst(item);
+
+    let counter = 0;
+    let currentNode = this.head;
+    let previousNode = this.head;
+
+    while ((counter !== index -1) && (currentNode !== null)) {
+      previousNode = currentNode;
+      currentNode = currentNode.next;
+      counter++;
+    }
+    if (currentNode === null) {
+      return 'Index does not exist';
+    } else {
+      let newNode = new _Node(item, previousNode.next);
+      previousNode.next = newNode;
+    }
+  }
+
   find(item) {
     let currNode = this.head;
     if (!this.head) {
