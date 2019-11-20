@@ -84,9 +84,34 @@ languageRouter
     //find current and next word based on head number in LinkedList Data structure
     let currWord = LanguageService.findCurrNode(sll, head.nextWord);
     let nextWord = currWord.next;
+      console.log(currWord.value.memory_value, nextWord)
 
-    if (guess.toLowerCase() === currWord.translation) {
-      return res.send('You got it right!');
+    if (guess.toLowerCase() === currWord.value.translation) {
+      await LanguageService.incrementCorrect(
+        req.app.get('db'),
+        currWord.value.id,
+        head.wordCorrectCount,
+        currWord.value.memory_value
+      );
+      await LanguageService.handleCorrectAnswer(
+        req.app.get('db'),
+        sll,
+        currWord.value,
+        nextWord.value.id,
+        req.language.id
+      );
+      head = await LanguageService.getLanguageHeadWord(
+        req.app.get('db'),
+        req.language.head
+      );
+      return res.json({
+        nextWord: nextWord.value.original,
+        totalScore: req.language.total_score,
+        wordCorrectCount: head.wordCorrectCount,
+        wordIncorrectCount: head.wordIncorrectCount,
+        answer: currWord.value.translation,
+        isCorrect: true
+      });
     } else {      
       await LanguageService.incrementIncorrect(
         req.app.get('db'),

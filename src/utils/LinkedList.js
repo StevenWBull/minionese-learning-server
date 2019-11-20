@@ -48,8 +48,10 @@ class LinkedList {
     if (currentNode === null) {
       return 'Index does not exist';
     } else {
-      let newNode = new _Node(item, previousNode.next);
+      let new_item = { ...item, next: currentNode.next.value.id };
+      let newNode = new _Node(new_item, previousNode.next);
       previousNode.next = newNode;
+      previousNode.next.value.next = newNode.value.id;
     }
   }
 

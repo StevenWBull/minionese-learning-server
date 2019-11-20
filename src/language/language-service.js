@@ -68,6 +68,17 @@ const LanguageService = {
       .where('language.user_id', user_id)
       .update({ head: new_head });
   }, */
+  incrementCorrect(db, word_id, curr_count, curr_memory) {
+    let new_count = Number(curr_count) + 1;
+    let new_memory = Number(curr_memory) * 2;
+    return db
+      .from('word')
+      .where({ id: word_id })
+      .update({ 
+        correct_count: new_count,
+        memory_value: new_memory
+      });
+  },
 
   incrementIncorrect(db, word_id, curr_count) {
     let new_count = Number(curr_count) + 1
@@ -80,14 +91,41 @@ const LanguageService = {
       });
   },
 
-  handleCorrectAnswer(sll, item) {
+  handleCorrectAnswer(db, sll, item, key, language_id) {
     //pull the correct item
     //set memory_value to *2 of current
     //save item to a variable
-    //loop through current list with counter, check where memory_value >= then stop
+    //move item back X memory_value spots
     //insert item at the new index
     //update database with LL
+    sll.remove(item);
+    sll.insertAfter(item, key);
+    
+    let updateDb = [];
+    let currNode = sll.head;
 
+    while(currNode !== null) {
+      updateDb.push(currNode.value);
+      currNode = currNode.next;
+    }
+
+    return db.transaction(async trx =>{
+      return Promise.all([
+        trx('language')
+          .where({id: language_id})
+          .update({
+            head: updateDb[0].id
+          }),
+        
+        ...updateDb.map(word => {
+          return trx('word')
+            .where({id: word.id})
+            .update({
+              next: word.next ? word.next : null,
+            });
+        })
+      ]);
+    });
   },
 
   handleIncorrectAnswer(db, sll, item, key, language_id) {
