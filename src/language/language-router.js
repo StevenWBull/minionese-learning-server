@@ -81,12 +81,17 @@ languageRouter
     );
     //create linkedlist from current words
     let sll = LanguageService.createLinkedList(words);
+
     //find current and next word based on head number in LinkedList Data structure
     let currWord = LanguageService.findCurrNode(sll, head.nextWord);
     let nextWord = currWord.next;
-      console.log(currWord.value.memory_value, nextWord)
-
-    if (guess.toLowerCase() === currWord.value.translation) {
+    
+    if (guess.toLowerCase() === currWord.value.translation.toLowerCase()) {
+      await LanguageService.incrementTotalScore(
+        req.app.get('db'),
+        req.user.id,
+        req.language.total_score
+      )
       await LanguageService.incrementCorrect(
         req.app.get('db'),
         currWord.value.id,
@@ -97,22 +102,23 @@ languageRouter
         req.app.get('db'),
         sll,
         currWord.value,
-        nextWord.value.id,
         req.language.id
       );
       head = await LanguageService.getLanguageHeadWord(
         req.app.get('db'),
         req.language.head
       );
+  
       return res.json({
         nextWord: nextWord.value.original,
-        totalScore: req.language.total_score,
+        totalScore: req.language.total_score + 1,
         wordCorrectCount: head.wordCorrectCount,
         wordIncorrectCount: head.wordIncorrectCount,
         answer: currWord.value.translation,
         isCorrect: true
       });
-    } else {      
+    } 
+    else {      
       await LanguageService.incrementIncorrect(
         req.app.get('db'),
         currWord.value.id,

@@ -61,13 +61,14 @@ const LanguageService = {
     return sll.findNode(name);
   },
 
-/*   updatedHead(db, user_id, new_head) {
-    new_head = Number(new_head);
+  incrementTotalScore(db, user_id, curr_score) {
+    let new_score = Number(curr_score) + 1;
     return db
       .from('language')
       .where('language.user_id', user_id)
-      .update({ head: new_head });
-  }, */
+      .update({ total_score: new_score });
+  },
+
   incrementCorrect(db, word_id, curr_count, curr_memory) {
     let new_count = Number(curr_count) + 1;
     let new_memory = Number(curr_memory) * 2;
@@ -91,15 +92,23 @@ const LanguageService = {
       });
   },
 
-  handleCorrectAnswer(db, sll, item, key, language_id) {
+  handleCorrectAnswer(db, sll, item, language_id) {
     //pull the correct item
     //set memory_value to *2 of current
     //save item to a variable
     //move item back X memory_value spots
     //insert item at the new index
     //update database with LL
+    let index = item.memory_value * 2;
+    let sllSize = sll.size();
     sll.remove(item);
-    sll.insertAfter(item, key);
+  
+    if (index >= sllSize) {
+      sll.insertLast(item);
+    }
+    else {
+      sll.insertAt(item, index);
+    }
     
     let updateDb = [];
     let currNode = sll.head;
@@ -108,7 +117,7 @@ const LanguageService = {
       updateDb.push(currNode.value);
       currNode = currNode.next;
     }
-
+    
     return db.transaction(async trx =>{
       return Promise.all([
         trx('language')
@@ -121,7 +130,7 @@ const LanguageService = {
           return trx('word')
             .where({id: word.id})
             .update({
-              next: word.next ? word.next : null,
+              next: word.next,
             });
         })
       ]);

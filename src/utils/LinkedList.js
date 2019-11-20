@@ -22,7 +22,10 @@ class LinkedList {
       while (tempNode.next !== null) {
         tempNode = tempNode.next;
       }
-      tempNode.next = new _Node(item, null);
+      let new_item = { ...item, next: null };
+      let newNode = new _Node(new_item, null);
+      tempNode.next = newNode;
+      tempNode.value.next = newNode.value.id;
     }
   }
 
@@ -40,7 +43,7 @@ class LinkedList {
     let currentNode = this.head;
     let previousNode = this.head;
 
-    while ((counter !== index -1) && (currentNode !== null)) {
+    while ((counter !== index) && (currentNode !== null)) {
       previousNode = currentNode;
       currentNode = currentNode.next;
       counter++;
@@ -48,10 +51,10 @@ class LinkedList {
     if (currentNode === null) {
       return 'Index does not exist';
     } else {
-      let new_item = { ...item, next: currentNode.next.value.id };
+      let new_item = { ...item, next: currentNode.value.id };
       let newNode = new _Node(new_item, previousNode.next);
       previousNode.next = newNode;
-      previousNode.next.value.next = newNode.value.id;
+      previousNode.value.next = newNode.value.id;
     }
   }
 
@@ -67,7 +70,7 @@ class LinkedList {
     if (currentNode === null) {
       return 'Key not found';
     } else {
-      let new_item = { ...item, next: currentNode.next.value.id };
+      let new_item = { ...item, next: currentNode.next.value ? currentNode.next.value.id : null};
       let newNode = new _Node(new_item, currentNode.next);
       currentNode.next = newNode;
       currentNode.value.next = newNode.value.id;
@@ -108,8 +111,22 @@ class LinkedList {
     }
     previousNode.next = currNode.next;
   }
+
+  size() {
+    let counter = 0;
+    let currNode = this.head;
+
+    while(currNode !== null) {
+      counter++;
+      currNode = currNode.next;
+    }
+
+    return counter;
+  }
 }
 
+
+// testing constructor methods
 /* const main = () => {
   const sll = new LinkedList();
   sll.insertFirst(
@@ -123,7 +140,8 @@ class LinkedList {
       correct_count: 0,
       incorrect_count: 0
     });
-  console.log(sll.findNode(1));
+  sll.insertFirst(2)
+  console.log(sll.size());
 }
 
 main(); */
