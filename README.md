@@ -20,7 +20,7 @@ API URL: https://minionese-stevenb-brock.herokuapp.com/api
 -'/language'
 #### Allows for GET retrieval of the next word, along with current score counts
 -'/language/head'
-#### POST user guess word to the server, which checks and responds with an object containing if the guess is correct or not; Must contain body: { guess: guess }
+#### POST user guess word to the server, which checks and responds with an object containing if the guess is correct or not; Must contain body: { guess: userGuess }
 -'/language/guess'
 #### Allows POST for new users
 -'/user'
