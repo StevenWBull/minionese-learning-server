@@ -7,7 +7,7 @@ The minionese learning app is a project created by Steven Bull and Brock Boutwel
 
 ### Live Website
 
-https://stevenb-brock-minionese-app.now.sh/
+https://minionese-app.brockboutwell.now.sh/
 
 ### Client GitHub Repo
 
