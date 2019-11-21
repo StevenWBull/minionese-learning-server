@@ -7,9 +7,26 @@ The minionese learning app is a project created by Steven Bull and Brock Boutwel
 
 ### Live Website
 
-
+https://stevenb-brock-minionese-app.now.sh/
 
 ### Client GitHub Repo
 
+https://github.com/Bomaani/StevenB-Brock-Spaced-Rep-Client
+
+### API Endpoints
+API URL: https://minionese-stevenb-brock.herokuapp.com/api
+
+#### Allows user to GET the language and words from the database
+-'/language'
+#### Allows for GET retrieval of the next word, along with current score counts
+-'/language/head'
+#### POST user guess word to the server, which checks and responds with an object containing if the guess is correct or not; Must contain body: { guess: guess }
+-'/language/guess'
+#### Allows POST for new users
+-'/user'
+#### Handles verification of user for login purposes on POST, PUT refreshes the token as necessary
+-'/auth/token'
 
 
+### Technologies Used
+React, CSS, HTML, Node, Express, and PostgreSQL.
