@@ -19,6 +19,7 @@ languageRouter
           error: `You don't have any languages`,
         });
 
+      // eslint-disable-next-line require-atomic-updates
       req.language = language;
       next();
     } catch (error) {
@@ -62,88 +63,91 @@ languageRouter
 
 languageRouter
   .post('/guess', async (req, res, next) => {
-    const { guess } = req.body;
+    try {const { guess } = req.body;
 
-    if (!guess) {
-      return res.status(400).send({
-        error: `Missing 'guess' in request body`
-      });
-    }
-    //get users words
-    const words = await LanguageService.getLanguageWords(
-      req.app.get('db'),
-      req.language.id
-    );
+      if (!guess) {
+        return res.status(400).send({
+          error: `Missing 'guess' in request body`
+        });
+      }
+      //get users words
+      const words = await LanguageService.getLanguageWords(
+        req.app.get('db'),
+        req.language.id
+      );
 
-    let head = await LanguageService.getLanguageHeadWord(
-      req.app.get('db'),
-      req.language.head
-    );
-    //create linkedlist from current words
-    let sll = LanguageService.createLinkedList(words);
+      let head = await LanguageService.getLanguageHeadWord(
+        req.app.get('db'),
+        req.language.head
+      );
+      //create linkedlist from current words
+      let sll = LanguageService.createLinkedList(words);
 
-    //find current and next word based on head number in LinkedList Data structure
-    let currWord = LanguageService.findCurrNode(sll, head.nextWord);
-    let nextWord = currWord.next;
+      //find current and next word based on head number in LinkedList Data structure
+      let currWord = LanguageService.findCurrNode(sll, head.nextWord);
+      let nextWord = currWord.next;
     
-    if (guess.toLowerCase() === currWord.value.translation.toLowerCase()) {
-      await LanguageService.incrementTotalScore(
-        req.app.get('db'),
-        req.user.id,
-        req.language.total_score
-      )
-      await LanguageService.incrementCorrect(
-        req.app.get('db'),
-        currWord.value.id,
-        head.wordCorrectCount,
-        currWord.value.memory_value
-      );
-      await LanguageService.handleCorrectAnswer(
-        req.app.get('db'),
-        sll,
-        currWord.value,
-        req.language.id
-      );
-      head = await LanguageService.getLanguageHeadWord(
-        req.app.get('db'),
-        req.language.head
-      );
+      if (guess.toLowerCase() === currWord.value.translation.toLowerCase()) {
+        await LanguageService.incrementTotalScore(
+          req.app.get('db'),
+          req.user.id,
+          req.language.total_score
+        );
+        await LanguageService.incrementCorrect(
+          req.app.get('db'),
+          currWord.value.id,
+          head.wordCorrectCount,
+          currWord.value.memory_value
+        );
+        await LanguageService.handleCorrectAnswer(
+          req.app.get('db'),
+          sll,
+          currWord.value,
+          req.language.id
+        );
+        head = await LanguageService.getLanguageHeadWord(
+          req.app.get('db'),
+          req.language.head
+        );
   
-      return res.json({
-        nextWord: nextWord.value.original,
-        totalScore: req.language.total_score + 1,
-        wordCorrectCount: head.wordCorrectCount,
-        wordIncorrectCount: head.wordIncorrectCount,
-        answer: currWord.value.translation,
-        isCorrect: true
-      });
-    } 
-    else {      
-      await LanguageService.incrementIncorrect(
-        req.app.get('db'),
-        currWord.value.id,
-        head.wordIncorrectCount
-      );
-      await LanguageService.handleIncorrectAnswer(
-        req.app.get('db'),
-        sll,
-        currWord.value,
-        nextWord.value.id,
-        req.language.id
-      );
-      // reset head values with new values
-      head = await LanguageService.getLanguageHeadWord(
-        req.app.get('db'),
-        req.language.head
-      );
-      return res.json({
-        nextWord: nextWord.value.original,
-        totalScore: req.language.total_score,
-        wordCorrectCount: head.wordCorrectCount,
-        wordIncorrectCount: head.wordIncorrectCount,
-        answer: currWord.value.translation,
-        isCorrect: false
-      });
+        return res.json({
+          nextWord: nextWord.value.original,
+          totalScore: req.language.total_score + 1,
+          wordCorrectCount: head.wordCorrectCount,
+          wordIncorrectCount: head.wordIncorrectCount,
+          answer: currWord.value.translation,
+          isCorrect: true
+        });
+      } 
+      else {      
+        await LanguageService.incrementIncorrect(
+          req.app.get('db'),
+          currWord.value.id,
+          head.wordIncorrectCount
+        );
+        await LanguageService.handleIncorrectAnswer(
+          req.app.get('db'),
+          sll,
+          currWord.value,
+          nextWord.value.id,
+          req.language.id
+        );
+        // reset head values with new values
+        head = await LanguageService.getLanguageHeadWord(
+          req.app.get('db'),
+          req.language.head
+        );
+        return res.json({
+          nextWord: nextWord.value.original,
+          totalScore: req.language.total_score,
+          wordCorrectCount: head.wordCorrectCount,
+          wordIncorrectCount: head.wordIncorrectCount,
+          answer: currWord.value.translation,
+          isCorrect: false
+        });
+      }
+    } catch(error) {
+      next(error);
     }
   });
 

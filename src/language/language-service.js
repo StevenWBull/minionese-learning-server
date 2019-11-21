@@ -82,7 +82,7 @@ const LanguageService = {
   },
 
   incrementIncorrect(db, word_id, curr_count) {
-    let new_count = Number(curr_count) + 1
+    let new_count = Number(curr_count) + 1;
     return db
       .from('word')
       .where({ id: word_id })
