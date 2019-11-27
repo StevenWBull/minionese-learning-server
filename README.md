@@ -11,7 +11,7 @@ https://minionese-app.now.sh
 
 ### Client GitHub Repo
 
-https://github.com/Bomaani/StevenB-Brock-Spaced-Rep-Client
+https://github.com/StevenWBull/minionese-learning-client
 
 ### API Endpoints
 API URL: https://minionese-stevenb-brock.herokuapp.com/api
